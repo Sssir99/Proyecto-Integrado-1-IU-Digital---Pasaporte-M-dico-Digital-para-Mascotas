@@ -31,8 +31,6 @@ Aplicación web monolítica para gestionar el historial médico de mascotas: vac
 | **Bootstrap 5** | Framework CSS (vía CDN, sin Node.js) | 5.3 |
 | **Jinja2** | Motor de plantillas HTML (incluido con Flask) | — |
 
-> **Nota:** No usamos ORM (como SQLAlchemy). Las consultas a la base de datos se hacen con SQL nativo para mantener la curva de aprendizaje baja.
-
 ---
 
 ## 📁 Estructura del Proyecto
@@ -309,9 +307,3 @@ def mascotas():
   ```powershell
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
   ```
-
----
-
-<p align="center">
-  Hecho con ❤️ por el equipo de Proyecto Integrado — IU Digital 2026
-</p>
