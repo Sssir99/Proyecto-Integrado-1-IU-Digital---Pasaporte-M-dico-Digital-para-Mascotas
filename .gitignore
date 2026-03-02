@@ -1,0 +1,33 @@
+# ============================================
+# .gitignore — Pasaporte Médico Digital
+# ============================================
+
+# Entorno virtual de Python
+venv/
+env/
+.venv/
+
+# Archivo de variables de entorno (¡NUNCA subir a Git!)
+.env
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de IDEs / Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Distribución / empaquetado
+dist/
+build/
+*.egg-info/

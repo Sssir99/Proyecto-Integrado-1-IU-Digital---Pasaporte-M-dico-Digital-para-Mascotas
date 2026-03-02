@@ -1,0 +1,14 @@
+<!-- 500.html — Error interno del servidor -->
+{% extends "base.html" %}
+
+{% block titulo %}Error del servidor{% endblock %}
+
+{% block contenido %}
+<div class="text-center py-5">
+    <h1 class="display-1 text-muted">500</h1>
+    <p class="lead">Ocurrió un error inesperado. Inténtalo de nuevo más tarde.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+        <i class="bi bi-house-door"></i> Volver al inicio
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+<!--
+============================================
+index.html — Página de inicio
+Hereda de base.html
+============================================
+-->
+{% extends "base.html" %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+
+<!-- Sección de bienvenida (Hero) -->
+<div class="text-center py-5">
+    <h1 class="display-5 fw-bold text-primary">
+        <i class="bi bi-heart-pulse-fill"></i> Pasaporte Médico Digital para Mascotas
+    </h1>
+    <p class="lead text-muted mt-3">
+        Un solo lugar para el historial médico completo de tu mascota:
+        vacunas, desparasitaciones, cirugías y más.
+    </p>
+    <hr class="my-4 w-50 mx-auto">
+</div>
+
+<!-- Tarjetas informativas -->
+<div class="row g-4">
+
+    <!-- Tarjeta 1 -->
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-clipboard2-pulse fs-1 text-primary"></i>
+                <h5 class="card-title mt-3">Historial Médico</h5>
+                <p class="card-text text-muted">
+                    Registra vacunas, desparasitaciones y procedimientos
+                    en un solo lugar accesible.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjeta 2 -->
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-shield-check fs-1 text-success"></i>
+                <h5 class="card-title mt-3">Seguro y Confiable</h5>
+                <p class="card-text text-muted">
+                    La información de tu mascota almacenada de forma
+                    segura en la nube.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjeta 3 -->
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-phone fs-1 text-info"></i>
+                <h5 class="card-title mt-3">Acceso desde Cualquier Lugar</h5>
+                <p class="card-text text-muted">
+                    Consulta el pasaporte médico de tu mascota
+                    desde cualquier dispositivo con internet.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

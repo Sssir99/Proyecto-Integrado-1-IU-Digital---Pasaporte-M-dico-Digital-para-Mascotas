@@ -1,0 +1,18 @@
+/*
+============================================
+estilos.css — Estilos personalizados
+============================================
+Usa este archivo para agregar estilos propios
+que complementen los de Bootstrap.
+*/
+
+/* Asegura que el footer quede siempre abajo */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
