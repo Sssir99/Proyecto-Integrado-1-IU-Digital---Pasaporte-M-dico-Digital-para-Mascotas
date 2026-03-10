@@ -7,7 +7,8 @@ Archivo principal de la aplicación Flask
 
 import os
 from flask import Flask, render_template, g
-import pymysql
+import psycopg2
+import psycopg2.extras
 from dotenv import load_dotenv
 
 # -----------------------------------------------
@@ -23,32 +24,18 @@ app = Flask(__name__)
 # Clave secreta necesaria para sesiones y protección CSRF
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY', 'clave-por-defecto-cambiar-en-produccion')
 
-# Configuración de conexión a MySQL (leída desde .env)
-app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
-app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT', 3306))
-app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'root')
-app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', '')
-app.config['MYSQL_DB'] = os.getenv('MYSQL_DB', 'pasaporte_medico')
+# Configuración de conexión a PostgreSQL (leída desde .env)
+app.config['DATABASE_URL'] = os.getenv('DATABASE_URL', 'postgresql://postgres:password@localhost:5432/postgres')
 
 
 # -----------------------------------------------
-# 3. Funciones para manejar la conexión a MySQL
+# 3. Funciones para manejar la conexión a PostgreSQL
 # -----------------------------------------------
 def obtener_conexion():
     """
-    Crea y retorna una conexión a la base de datos MySQL.
-    Usa PyMySQL con cursores tipo diccionario para que los
-    resultados se devuelvan como dict en lugar de tuplas.
+    Crea y retorna una conexión a la base de datos PostgreSQL.
     """
-    conexion = pymysql.connect(
-        host=app.config['MYSQL_HOST'],
-        port=app.config['MYSQL_PORT'],
-        user=app.config['MYSQL_USER'],
-        password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DB'],
-        charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor  # Resultados como diccionarios
-    )
+    conexion = psycopg2.connect(app.config['DATABASE_URL'])
     return conexion
 
 
@@ -61,8 +48,8 @@ def obtener_db():
     if 'db' not in g:
         try:
             g.db = obtener_conexion()
-        except pymysql.MySQLError as e:
-            print(f"[ERROR] No se pudo conectar a MySQL: {e}")
+        except psycopg2.Error as e:
+            print(f"[ERROR] No se pudo conectar a PostgreSQL: {e}")
             g.db = None
     return g.db
 

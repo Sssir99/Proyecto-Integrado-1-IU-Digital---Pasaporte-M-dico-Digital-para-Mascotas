@@ -26,8 +26,8 @@ Aplicación web monolítica para gestionar el historial médico de mascotas: vac
 |------------|-----|---------|
 | **Python** | Lenguaje principal | 3.10+ |
 | **Flask** | Framework web (backend) | 3.1 |
-| **PyMySQL** | Conector a MySQL (puro Python) | 1.1 |
-| **MySQL** | Base de datos relacional (en la nube) | 8.x |
+| **psycopg2** | Conector a PostgreSQL (precompilado) | 2.9 |
+| **PostgreSQL** | Base de datos relacional (en Supabase) | 15+ |
 | **Bootstrap 5** | Framework CSS (vía CDN, sin Node.js) | 5.3 |
 | **Jinja2** | Motor de plantillas HTML (incluido con Flask) | — |
 
@@ -77,7 +77,7 @@ Antes de comenzar, asegúrate de tener instalado:
      git --version
      ```
 
-3. **Acceso a la base de datos MySQL** (el host, usuario y contraseña los compartirá el líder del equipo)
+3. **Acceso a la base de datos PostgreSQL** (la URL de Supabase y la contraseña los compartirá el líder del equipo)
 
 ---
 
@@ -137,11 +137,7 @@ Luego **abre el archivo `.env`** con tu editor de texto y llena los datos reales
 
 ```env
 FLASK_SECRET_KEY=una-clave-secreta-cualquiera
-MYSQL_HOST=tu-host-de-mysql.ejemplo.com
-MYSQL_PORT=3306
-MYSQL_USER=tu_usuario
-MYSQL_PASSWORD=tu_contraseña
-MYSQL_DB=pasaporte_medico
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.kwgoxdgdsvxmkcokfydf.supabase.co:5432/postgres
 ```
 
 > ⚠️ **NUNCA subas el archivo `.env` a Git.** Ya está incluido en el `.gitignore`.
@@ -150,11 +146,11 @@ MYSQL_DB=pasaporte_medico
 
 ## 🗄 Configuración de la Base de Datos
 
-La conexión a MySQL está configurada en `app.py` y lee los datos desde el archivo `.env`. Usamos **PyMySQL** como conector, que es puro Python y no requiere instalar dependencias del sistema.
+La conexión a PostgreSQL está configurada en `app.py` y lee los datos desde el archivo `.env`. Usamos **psycopg2-binary** como conector a Supabase.
 
 ### Crear las tablas (ejemplo inicial)
 
-Conéctate a tu base de datos MySQL (usando MySQL Workbench, DBeaver, o la terminal) y ejecuta el script SQL que el equipo defina. Por ejemplo:
+Conéctate a tu base de datos PostgreSQL en Supabase (usando el SQL Editor de su panel web, DBeaver, o la terminal) y ejecuta el script SQL que el equipo defina. Por ejemplo:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS pasaporte_medico;
@@ -197,12 +193,12 @@ Para detener el servidor, presiona `Ctrl + C` en la terminal.
 ### Flujo básico de una petición
 
 ```
-Usuario → Navegador → Flask (app.py) → MySQL → Flask → Jinja2 (HTML) → Navegador
+Usuario → Navegador → Flask (app.py) → PostgreSQL → Flask → Jinja2 (HTML) → Navegador
 ```
 
 1. El usuario visita una URL (ej: `/`).
 2. Flask busca la ruta correspondiente en `app.py`.
-3. Si la ruta necesita datos, se consulta MySQL con PyMySQL.
+3. Si la ruta necesita datos, se consulta PostgreSQL en Supabase con psycopg2.
 4. Flask renderiza una plantilla HTML con Jinja2 y le pasa los datos.
 5. El navegador muestra la página con Bootstrap 5.
 
@@ -246,9 +242,10 @@ def mascotas():
     if db is None:
         return "Error de conexión a la base de datos", 500
 
-    cursor = db.cursor()
+    # Usamos DictCursor para que los resultados sean diccionarios y no tuplas
+    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cursor.execute("SELECT * FROM mascotas")
-    lista = cursor.fetchall()  # Retorna una lista de diccionarios
+    lista = cursor.fetchall()
     cursor.close()
 
     return render_template('mascotas.html', mascotas=lista)
@@ -290,10 +287,9 @@ def mascotas():
 
 ## ❓ Problemas Comunes
 
-### "No se pudo conectar a MySQL"
-- Verifica que los datos en tu archivo `.env` sean correctos.
-- Asegúrate de que tu IP esté autorizada en el servidor MySQL en la nube.
-- Verifica que el puerto `3306` no esté bloqueado por tu firewall.
+### "No se pudo conectar a PostgreSQL"
+- Verifica que los datos de tu Supabase en el archivo `.env` sean correctos (fíjate en el puerto, suele ser `5432` o `6543`).
+- Verifica que no haya problemas de conectividad de red con el host de Supabase.
 
 ### "ModuleNotFoundError: No module named 'flask'"
 - Asegúrate de tener el entorno virtual **activado** (debes ver `(venv)` en tu terminal).

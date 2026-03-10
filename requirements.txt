@@ -7,8 +7,8 @@
 # Framework web principal
 Flask==3.1.0
 
-# Conector MySQL para Python (puro Python, no requiere compilar)
-PyMySQL==1.1.1
+# Conector PostgreSQL para Python (precompilado, fácil instalación)
+psycopg2-binary==2.9.10
 
 # Para cargar variables de entorno desde un archivo .env
 python-dotenv==1.1.0
